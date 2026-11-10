@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { api } from '../../services/apiService.js';
+import { demoLogin } from '../../services/demoData.js';
 
 const AuthContext = createContext(undefined);
 
@@ -40,6 +41,14 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setIsAuthenticating(true);
     try {
+      const demoUser = demoLogin(email, password);
+      if (demoUser) {
+        localStorage.setItem('ry_demo_mode', 'true');
+        localStorage.setItem('ry_userId', demoUser.id);
+        setUser(demoUser);
+        return true;
+      }
+      localStorage.removeItem('ry_demo_mode');
       const foundUser = await api.login(email, password);
       if (!foundUser || foundUser.error) return false;
 
@@ -76,6 +85,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('ry_userId');
+    localStorage.removeItem('ry_demo_mode');
   };
 
   return (

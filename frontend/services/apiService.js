@@ -1,6 +1,6 @@
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const api = {
+const realApi = {
   async login(email, password) {
     const res = await fetch(`${BASE_URL}/users/login`, {
       method: "POST",
@@ -290,3 +290,13 @@ export const api = {
     return res.json();
   }
 };
+
+// Demo mode is opt-in per browser session; normal visitors continue using the real API.
+import { demoApi } from './demoData.js';
+
+export const api = new Proxy(realApi, {
+  get(target, property, receiver) {
+    if (localStorage.getItem('ry_demo_mode') === 'true' && property in demoApi) return demoApi[property];
+    return Reflect.get(target, property, receiver);
+  }
+});

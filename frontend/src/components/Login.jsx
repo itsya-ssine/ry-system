@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
+import { demoAccounts } from '../../services/demoData.js';
 import { KeyRound, ArrowLeft, UserPlus, Mail, User as UserIcon, Eye, EyeOff, Lock } from 'lucide-react';
 
 const Login = ({ onBack }) => {
@@ -167,6 +168,34 @@ const Login = ({ onBack }) => {
             {isSignUp ? 'Sign Up' : 'Sign In'}
           </button>
         </form>
+
+        {!isSignUp && (
+          <div className="mb-6 rounded-xl border border-indigo-100 bg-indigo-50/70 p-4">
+            <div className="flex items-center justify-between gap-2 mb-1">
+              <h2 className="text-sm font-bold text-indigo-950">Explore the live demo</h2>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-white px-2 py-1 rounded-full">Demo access</span>
+            </div>
+            <p className="text-xs text-indigo-900/70 mb-3">
+              These public sample accounts use static browser data. No real accounts or database records are created.
+            </p>
+            <div className="space-y-2">
+              {demoAccounts.map((account) => (
+                <div key={account.email} className="flex items-center justify-between gap-2 rounded-lg bg-white px-3 py-2 border border-indigo-100">
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-gray-800">{account.role}</p>
+                    <p className="text-[11px] text-gray-500 break-all">{account.email}</p>
+                    <p className="text-[11px] text-gray-500">Password: <span className="font-mono text-gray-700">{account.password}</span></p>
+                  </div>
+                  <button type="button"
+                    onClick={() => { setEmail(account.email); setPassword(account.password); setError(''); }}
+                    className="shrink-0 text-xs font-semibold text-indigo-700 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-3 py-2 rounded-lg">
+                    Use account
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="text-center mb-8">
           <button

@@ -296,7 +296,11 @@ import { demoApi } from './demoData.js';
 
 export const api = new Proxy(realApi, {
   get(target, property, receiver) {
-    if (localStorage.getItem('ry_demo_mode') === 'true' && property in demoApi) return demoApi[property];
+    // The public demo uses static data by default. Set VITE_DEMO_MODE=false
+    // to opt back into the real backend; a successful demo login always opts in.
+    const demoMode = import.meta.env.VITE_DEMO_MODE !== 'false' ||
+      localStorage.getItem('ry_demo_mode') === 'true';
+    if (demoMode && property in demoApi) return demoApi[property];
     return Reflect.get(target, property, receiver);
   }
 });

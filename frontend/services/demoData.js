@@ -67,12 +67,23 @@ export const demoLogin = (email, password) => {
 };
 
 export const demoApi = {
+  login: async () => ({ error: 'Use one of the demo accounts shown on the login screen.' }),
+  registerUser: async (name, email, password) => {
+    const existing = read().users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
+    if (existing) return { error: 'An account with this email already exists.' };
+    return mutate(s => {
+      const user = { id: `demo-user-${Date.now()}`, name, email, role: 'student', bio: '' };
+      s.users.push(user);
+      return user;
+    });
+  },
   getUser: async id => read().users.find(u => u.id === id) || null,
   getUsers: async () => read().users.filter(u => u.role !== 'admin'),
   getClubs: async () => read().clubs,
   getClubById: async id => read().clubs.find(c => c.id === id) || null,
   getManagedClub: async id => ({ id: read().clubs.find(c => c.managerId === id)?.id }),
   getActivities: async () => read().activities,
+  getActivityById: async id => read().activities.find(a => a.id === id) || null,
   getRecentActivities: async () => read().activities.slice(0, 8),
   getArchivedActivities: async () => read().archivedActivities,
   getStudentRegistrations: async studentId => read().registrations.filter(r => r.studentId === studentId).map(r => ({ ...r, clubId: r.clubId })),

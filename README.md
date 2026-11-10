@@ -6,11 +6,9 @@ RY-SYSTEM is a university project developed collaboratively by **Yassine Elmajdo
 
 ## Live Demo
 
-**Frontend:** [https://ry-frontend.vercel.app](https://ry-frontend.vercel.app)
+Explore the application:
 
-**Backend API:** [https://ry-backend.vercel.app](https://ry-backend.vercel.app)
-
-> The demo URLs above are the existing deployments. Replace them with the final deployment URLs once the monorepo is configured.
+**[RY-SYSTEM — Live Demo](https://ry-system-frontend.vercel.app/)
 
 ## Features
 
